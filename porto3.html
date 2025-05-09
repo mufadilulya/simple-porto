@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mudiya - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script>
+        // Tailwind Config
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#1e40af',
+                        dark: '#1f2937',
+                        light: '#f9fafb'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+
+        // Enhanced typing animation with customizable text
+document.addEventListener('DOMContentLoaded', function() {
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    menuBtn.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+            // Close mobile menu after clicking
+            mobileMenu.classList.add('hidden');
+        });
+    });
+
+    // Project filter
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projects = document.querySelectorAll('.project-item');
+    
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Remove active class from all buttons
+            filterBtns.forEach(b => b.classList.remove('bg-primary', 'text-white'));
+            filterBtns.forEach(b => b.classList.add('bg-gray-200', 'text-gray-800'));
+            
+            // Add active class to clicked button
+            btn.classList.remove('bg-gray-200', 'text-gray-800');
+            btn.classList.add('bg-primary', 'text-white');
+            
+            const filter = btn.getAttribute('data-filter');
+            
+            projects.forEach(project => {
+                if (filter === 'all') {
+                    project.style.display = 'block';
+                } else if (project.getAttribute('data-category') === filter) {
+                    project.style.display = 'block';
+                } else {
+                    project.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // ===== CUSTOMIZABLE TYPING ANIMATION SETTINGS =====
+    // You can easily change these values to customize the animation
+    const nameToType = "Mustafa Hadil Ulya"; // Change this to your name
+    
+    // Multiple professional titles that will cycle through
+    const professionalTitles = [
+        "Front-end Developer",
+        "UI/UX Designer",
+        "Mobile Developer",
+        // Add more titles as needed
+    ];
+    
+    const typingSpeed = 150; // Speed of typing (milliseconds per character)
+    const eraseSpeed = 100; // Speed of erasing (milliseconds per character)
+    const pauseDelay = 4000; // How long to pause after typing completes (milliseconds)
+    const startDelay = 1000; // Delay before animation starts (milliseconds)
+    // ===================================================
+
+    const nameElement = document.getElementById('typed-name');
+    const titleElement = document.getElementById('typed-title');
+    let currentTitleIndex = 0;
+
+    function typeText(element, text, callback) {
+        let index = 0;
+        element.textContent = '';
+        
+        function addChar() {
+            if (index < text.length) {
+                element.textContent += text.charAt(index);
+                index++;
+                setTimeout(addChar, typingSpeed);
+            } else {
+                // Text is fully typed, wait for pause delay then callback
+                setTimeout(callback, pauseDelay);
+            }
+        }
+        
+        addChar();
+    }
+
+    function eraseText(element, callback) {
+        function removeChar() {
+            if (element.textContent.length > 0) {
+                element.textContent = element.textContent.slice(0, -1);
+                setTimeout(removeChar, eraseSpeed);
+            } else {
+                // Text is fully erased, call the callback
+                callback();
+            }
+        }
+        
+        removeChar();
+    }
+
+    function animateName() {
+        typeText(nameElement, nameToType, function() {
+            eraseText(nameElement, animateName);
+        });
+    }
+
+    function animateTitle() {
+        // Get the current title from the array
+        const currentTitle = professionalTitles[currentTitleIndex];
+        
+        typeText(titleElement, currentTitle, function() {
+            eraseText(titleElement, function() {
+                // Move to the next title in the array
+                currentTitleIndex = (currentTitleIndex + 1) % professionalTitles.length;
+                animateTitle();
+            });
+        });
+    }
+
+    // Start the animations with a slight delay between them
+    setTimeout(animateName, startDelay);
+    setTimeout(animateTitle, startDelay);
+});
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .project-item {
+            transition: all 0.3s ease;
+        }
+        
+        .project-item:hover .project-overlay {
+            opacity: 1;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -9px;
+            top: 0;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #3b82f6;
+            border: 3px solid #09eea2;
+        }
+
+        .typing-cursor {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="font-sans bg-light text-dark">
+    <!-- Header -->
+    <header class="fixed w-full bg-white shadow-md z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="#" class="text-2xl font-bold text-primary">MUD<span class="text-dark">IYA</span></a>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#home" class="font-medium hover:text-primary transition-colors">Home</a>
+                    <a href="#about" class="font-medium hover:text-primary transition-colors">About</a>
+                    <a href="#skills" class="font-medium hover:text-primary transition-colors">Skills</a>
+                    <a href="#experience" class="font-medium hover:text-primary transition-colors">Experiences</a>
+                    <a href="#projects" class="font-medium hover:text-primary transition-colors">Projects</a>
+                    <a href="#contact" class="font-medium hover:text-primary transition-colors">Contact</a>
+                </nav>
+                
+                <!-- Mobile Menu Button -->
+                <button id="menu-btn" class="md:hidden text-dark focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Mobile Navigation -->
+            <nav id="mobile-menu" class="md:hidden hidden bg-white py-4 mt-2">
+                <div class="flex flex-col space-y-3">
+                    <a href="#home" class="font-medium hover:text-primary transition-colors">Home</a>
+                    <a href="#about" class="font-medium hover:text-primary transition-colors">About</a>
+                    <a href="#skills" class="font-medium hover:text-primary transition-colors">Skills</a>
+                    <a href="#experience" class="font-medium hover:text-primary transition-colors">Experiences</a>
+                    <a href="#projects" class="font-medium hover:text-primary transition-colors">Projects</a>
+                    <a href="#contact" class="font-medium hover:text-primary transition-colors">Contact</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-24 md:pt-0 min-h-screen flex items-center bg-gradient-to-r from-blue-50 to-indigo-50">
+        <div class="container mx-auto px-4 py-16">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-4">Hi, I'm <span id="typed-name" class="text-primary"></span><span class="text-primary typing-cursor">|</span></h1>
+                    <h2 class="text-2xl md:text-3xl font-semibold mb-6 text-gray-600"><span id="typed-title"></span><span class="text-gray-600 typing-cursor">|</span></h2>
+                    <p class="text-lg text-gray-700 mb-8">👋 Hi! I’m a Front-end Developer and Designer with a passion for crafting beautiful, user-centered digital experiences. I blend design thinking with clean, responsive code—bringing interfaces to life using tools like Figma, HTML, CSS, JavaScript, and modern frameworks like Tailwind CSS, Laravel, and Flutter. Let’s build something great together!</p>
+                    <div class="flex space-x-4">
+                        <a href="#contact" class="bg-primary hover:bg-secondary text-white font-medium py-3 px-6 rounded-full transition-colors duration-300 flex items-center">
+                            <span>Contact Me</span>
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                        <a href="#projects" class="border-2 border-primary text-primary hover:bg-primary hover:text-white font-medium py-3 px-6 rounded-full transition-colors duration-300">View My Work</a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-blue-500 shadow-xl">
+                        <img src="images/coba1.jpeg" alt="Mustafa Hadil Ulya" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">About Me</h2>
+                <div class="w-16 h-1 bg-primary mx-auto"></div>
+            </div>
+            
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <img src="images/aboutme.jpg" alt="Mustafa Hadil Ulya" class="rounded-lg shadow-lg w-full">
+                </div>
+                <div class="md:w-1/2 md:pl-12">
+                    <h3 class="text-2xl font-semibold mb-4">Who I Am</h3>
+                    <p class="text-gray-700 mb-6">
+                        Hi! I’m an active Software Engineering student with a strong interest in technology and design. I’m currently focusing on building my skills in mobile development using Flutter and backend development with Laravel. Although still learning, I’ve worked on several small projects both independently and in teams. I believe the best way to grow is through hands-on practice, exploration, and collaboration. I’m open to collaboration, internships, or freelance opportunities as part of my journey to grow in the tech industry.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-6 mb-8">
+                        <div>
+                            <p class="font-semibold">Name:</p>
+                            <p class="text-gray-700">Mustafa Hadil Ulya</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Email:</p>
+                            <p class="text-gray-700">hadilulya21@gmail.com</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Location:</p>
+                            <p class="text-gray-700">Cileungsi, Indonesia</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Availability:</p>
+                            <p class="text-gray-700">Available / Freelance</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-4">
+                        <a href="https://www.linkedin.com/in/mustafa-hadil-7a68772a1?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="bg-gray-800 hover:bg-gray-900 text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://github.com/mufadilulya" class="bg-gray-800 hover:bg-gray-900 text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 hover:bg-gray-900 text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://www.instagram.com/mudiya.12/" class="bg-gray-800 hover:bg-gray-900 text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+<section id="skills" class="py-20 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">My Skills</h2>
+            <div class="w-16 h-1 bg-primary mx-auto"></div>
+            <p class="text-gray-700 mt-4 max-w-2xl mx-auto">Here are my technical skills and proficiencies that I've developed throughout my career.</p>
+        </div>
+        
+        <div class="max-w-5xl mx-auto">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                <!-- HTML -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                    <div class="text-4xl text-primary mb-3">
+                        <i class="fab fa-html5"></i>
+                    </div>
+                    <h3 class="font-medium">HTML</h3>
+                </div>
+                
+                <!-- CSS -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                    <div class="text-4xl text-primary mb-3">
+                        <i class="fab fa-css3-alt"></i>
+                    </div>
+                    <h3 class="font-medium">CSS</h3>
+                </div>
+                
+                <!-- JavaScript -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                    <div class="text-4xl text-primary mb-3">
+                        <i class="fab fa-js"></i>
+                    </div>
+                    <h3 class="font-medium">JavaScript</h3>
+                </div>
+                
+                <!-- React
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                    <div class="text-4xl text-primary mb-3">
+                        <i class="fab fa-react"></i>
+                    </div>
+                    <h3 class="font-medium">React</h3>
+                </div> -->
+                
+                <!-- Node.js
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                    <div class="text-4xl text-primary mb-3">
+                        <i class="fab fa-node-js"></i>
+                    </div>
+                    <h3 class="font-medium">Node.js</h3>
+                </div> -->
+                
+                <!-- Python
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                    <div class="text-4xl text-primary mb-3">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <h3 class="font-medium">Python</h3>
+                </div> -->
+                
+                <!-- Git -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                    <div class="text-4xl text-primary mb-3">
+                        <i class="fab fa-git-alt"></i>
+                    </div>
+                    <h3 class="font-medium">Git</h3>
+                </div>
+                
+                <!-- Sass
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                    <div class="text-4xl text-primary mb-3">
+                        <i class="fab fa-sass"></i>
+                    </div>
+                    <h3 class="font-medium">Sass</h3>
+                </div> -->
+                
+                <!-- Bootstrap -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                    <div class="text-4xl text-primary mb-3">
+                        <i class="fab fa-bootstrap"></i>
+                    </div>
+                    <h3 class="font-medium">Bootstrap</h3>
+                </div>
+                
+                <!-- WordPress -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                    <div class="text-4xl text-primary mb-3">
+                        <i class="fab fa-wordpress"></i>
+                    </div>
+                    <h3 class="font-medium">WordPress</h3>
+                </div>
+                
+                <!-- Angular
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                    <div class="text-4xl text-primary mb-3">
+                        <i class="fab fa-angular"></i>
+                    </div>
+                    <h3 class="font-medium">Angular</h3>
+                </div> -->
+                
+                <!-- Vue.js
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                    <div class="text-4xl text-primary mb-3">
+                        <i class="fab fa-vuejs"></i>
+                    </div>
+                    <h3 class="font-medium">Vue.js</h3>
+                </div> -->
+                
+                <!-- PHP -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                    <div class="text-4xl text-primary mb-3">
+                        <i class="fab fa-php"></i>
+                    </div>
+                    <h3 class="font-medium">PHP</h3>
+                </div>
+
+                <!-- Flutter -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                    <div class="text-4xl text-primary mb-3">
+                        <i class="fa-brands fa-flutter"></i>
+                    </div>
+                    <h3 class="font-medium">Flutter</h3>
+                </div>
+
+                <!-- Laravel -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                    <div class="text-4xl text-primary mb-3">
+                        <i class="fa-brands fa-laravel"></i>
+                    </div>
+                    <h3 class="font-medium">Laravel</h3>
+                </div>
+
+                <!-- Dart -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                    <div class="text-4xl text-primary mb-3">
+                        <i class="fa-brands fa-dart-lang"></i>
+                    </div>
+                    <h3 class="font-medium">Dart</h3>
+                </div>
+
+                <!-- Dart -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                    <div class="text-4xl text-primary mb-3">
+                        <i class="fa-brands fa-figma"></i>
+                    </div>
+                    <h3 class="font-medium">Figma</h3>
+                </div>
+                
+                <!-- Docker
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                    <div class="text-4xl text-primary mb-3">
+                        <i class="fab fa-docker"></i>
+                    </div>
+                    <h3 class="font-medium">Docker</h3>
+                </div> -->
+                
+                <!-- AWS
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow">
+                    <div class="text-4xl text-primary mb-3">
+                        <i class="fab fa-aws"></i>
+                    </div>
+                    <h3 class="font-medium">AWS</h3>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Work and Education</h2>
+                <div class="w-16 h-1 bg-primary mx-auto"></div>
+                <p class="text-gray-700 mt-4 max-w-2xl mx-auto">My professional journey.</p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto relative">
+                <!-- Timeline Line -->
+                <div class="absolute left-0 md:left-1/2 top-0 bottom-0 w-0.5 bg-gray-200 transform md:translate-x-px"></div>
+                
+                <!-- Education 1 -->
+                <div class="relative mb-16">
+                    <div class="flex flex-col md:flex-row items-center">
+                        <div class="md:w-1/2 md:pr-12 mb-6 md:mb-0 md:text-right">
+                            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 relative timeline-item">
+                                <h3 class="text-xl font-semibold mb-2">Student</h3>
+                                <p class="text-primary font-medium mb-2">POLITEKNIK IDN</p>
+                                <p class="text-gray-600 mb-4">July 2024 - Present</p>
+                                <p class="text-gray-700">
+                                    I am an active Software Engineering student currently focused on developing applications using Flutter for mobile and Laravel for backend. Still in the learning phase, but already familiar with building simple projects independently and in teams. Passionate about creating responsive UI/UX and integrating APIs between mobile apps and backend services. Continuously improving my skills through projects and exploring new technologies. 
+                                </p>
+                            </div>
+                        </div>
+                        <div class="md:w-1/2 md:pl-12 hidden md:block"></div>
+                    </div>
+                </div>
+                
+                <!-- Experience 1 -->
+                <div class="relative mb-16">
+                    <div class="flex flex-col md:flex-row items-center">
+                        <div class="md:w-1/2 md:pr-12 hidden md:block"></div>
+                        <div class="md:w-1/2 md:pl-12">
+                            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 relative timeline-item">
+                                <h3 class="text-xl font-semibold mb-2">IT Support</h3>
+                                <p class="text-primary font-medium mb-2">PT. Seacon Bintang Sejahtera</p>
+                                <p class="text-gray-600 mb-4">Aug 2022 - Oct 2022</p>
+                                <p class="text-gray-700">
+                                    During my internship as an IT Support at PT. Seacon Bintang Sejahtera, I was responsible for assisting with the installation and maintenance of computers and office network systems. I helped troubleshoot hardware, software, and network issues to ensure smooth daily operations. My role also included configuring CCTV systems for security purposes, supporting staff through helpdesk services, and participating in the planning and setup of network cable routes. Additionally, I performed routine equipment checks, assisted with data backup tasks, and documented technical issues and solutions for internal reference.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Experience 2 -->
+                <div class="relative">
+                    <div class="flex flex-col md:flex-row items-center">
+                        <div class="md:w-1/2 md:pr-12 mb-6 md:mb-0 md:text-right">
+                            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 relative timeline-item">
+                                <h3 class="text-xl font-semibold mb-2">Kitchen Staff</h3>
+                                <p class="text-primary font-medium mb-2">Ayam Geprek Keprabon</p>
+                                <p class="text-gray-600 mb-4">Jan 2022 - Aug 2022 (8 Months)</p>
+                                <p class="text-gray-700">
+                                    Assist in the preparation of food ingredients according to kitchen operational standards. Maintain the cleanliness and tidiness of the kitchen area and cooking utensils. Prepare and serve food as instructed by the chef with a focus on quality and consistency. Take daily stock of ingredients and assist in recording kitchen needs. Work as a team to ensure smooth operations during peak hours.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="md:w-1/2 md:pl-12 hidden md:block"></div>
+                    </div>
+                </div>
+
+                <!-- Education 2 -->
+                <div class="relative mb-16">
+                    <div class="flex flex-col md:flex-row items-center">
+                        <div class="md:w-1/2 md:pr-12 hidden md:block"></div>
+                        <div class="md:w-1/2 md:pl-12">
+                            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 relative timeline-item">
+                                <h3 class="text-xl font-semibold mb-2">Student</h3>
+                                <p class="text-primary font-medium mb-2">SMK RISTEK JAYA</p>
+                                <p class="text-gray-600 mb-4">July 2021 - June 2024</p>
+                                <p class="text-gray-700">
+                                    A 2024 graduate of SMK majoring in Computer and Network Engineering with a strong understanding of network installation, computer assembly, as well as the basics of server administration and hardware and software troubleshooting. Have hands-on project experience, both in the school environment and during PKL, and are interested in developing themselves in the fields of IT Support, Networking, and Web Development. Able to work in a team or individually, fast learner, and familiar with the use of the latest technology devices and tools.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Education
+            <div class="mt-10">
+                <h2 class="text-2xl font-bold mb-10 text-center">Education</h2>
+                
+                <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+                    Education 1
+                    <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                        <h3 class="text-xl font-semibold mb-2">Vocational High School</h3>
+                        <p class="text-primary font-medium mb-2">SMK RISTEK JAYA</p>
+                        <p class="text-gray-600 mb-4">2021 - 2024</p>
+                        <p class="text-gray-700">
+                            Brief description of your studies, specialization, and any notable achievements.
+                        </p>
+                    </div>
+                    
+                    Education 2
+                    <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                        <h3 class="text-xl font-semibold mb-2">Bachelor's Degree</h3>
+                        <p class="text-primary font-medium mb-2">University Name</p>
+                        <p class="text-gray-600 mb-4">2009 - 2013</p>
+                        <p class="text-gray-700">
+                            Brief description of your studies, specialization, and any notable achievements.
+                        </p>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">My Projects</h2>
+                <div class="w-16 h-1 bg-primary mx-auto"></div>
+                <p class="text-gray-700 mt-4 max-w-2xl mx-auto">Showcasing some of my best work and projects I've been involved with.</p>
+            </div>
+            
+            <!-- Project Filters -->
+            <div class="flex flex-wrap justify-center gap-3 mb-12">
+                <button class="filter-btn bg-primary text-white px-5 py-2 rounded-full font-medium transition-colors" data-filter="all">All</button>
+                <button class="filter-btn bg-gray-200 text-gray-800 px-5 py-2 rounded-full font-medium transition-colors" data-filter="web">Web Development</button>
+                <button class="filter-btn bg-gray-200 text-gray-800 px-5 py-2 rounded-full font-medium transition-colors" data-filter="mobile">Mobile Apps</button>
+                <button class="filter-btn bg-gray-200 text-gray-800 px-5 py-2 rounded-full font-medium transition-colors" data-filter="design">UI/UX Design</button>
+            </div>
+            
+            <!-- Projects Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="project-item" data-category="web">
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md">
+                        <div class="relative group">
+                            <img src="images/foodstore.png" alt="Project 1" class="w-full h-60 object-cover">
+                            <div class="project-overlay absolute inset-0 bg-primary bg-opacity-90 flex items-center justify-center opacity-0 transition-opacity">
+                                <div class="text-center p-4">
+                                    <a href="#" class="inline-block bg-white text-primary hover:bg-gray-100 font-medium py-2 px-4 rounded-full transition-colors mx-2">
+                                        <i class="fas fa-link mr-1"></i> View Live
+                                    </a>
+                                    <a href="https://github.com/mufadilulya/food-store.git" class="inline-block bg-white text-primary hover:bg-gray-100 font-medium py-2 px-4 rounded-full transition-colors mx-2">
+                                        <i class="fab fa-github mr-1"></i> Source Code
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">E-commerce Website</h3>
+                            <p class="text-gray-700 mb-4">A fully responsive e-commerce platform with product catalog, shopping cart, and payment integration.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Laravel</span>
+                                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Filament</span>
+                                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Livewire</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 2 -->
+                <div class="project-item" data-category="mobile">
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md">
+                        <div class="relative group">
+                            <img src="images/flutterdoctor.png" alt="Project 2" class="w-full h-60 object-cover">
+                            <div class="project-overlay absolute inset-0 bg-primary bg-opacity-90 flex items-center justify-center opacity-0 transition-opacity">
+                                <div class="text-center p-4">
+                                    <a href="#" class="inline-block bg-white text-primary hover:bg-gray-100 font-medium py-2 px-4 rounded-full transition-colors mx-2">
+                                        <i class="fas fa-link mr-1"></i> View Live
+                                    </a>
+                                    <a href="#" class="inline-block bg-white text-primary hover:bg-gray-100 font-medium py-2 px-4 rounded-full transition-colors mx-2">
+                                        <i class="fab fa-github mr-1"></i> Source Code
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Doctor Appointment</h3>
+                            <p class="text-gray-700 mb-4">A mobile application for booking doctor. It helps users manage their time to check-up.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Laravel</span>
+                                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Flutter</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 3 -->
+                <div class="project-item" data-category="mobile">
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md">
+                        <div class="relative group">
+                            <img src="images/e-wallet.png" alt="Project 3" class="w-full h-60 object-cover">
+                            <div class="project-overlay absolute inset-0 bg-primary bg-opacity-90 flex items-center justify-center opacity-0 transition-opacity">
+                                <div class="text-center p-4">
+                                    <a href="#" class="inline-block bg-white text-primary hover:bg-gray-100 font-medium py-2 px-4 rounded-full transition-colors mx-2">
+                                        <i class="fas fa-link mr-1"></i> View Live
+                                    </a>
+                                    <a href="#" class="inline-block bg-white text-primary hover:bg-gray-100 font-medium py-2 px-4 rounded-full transition-colors mx-2">
+                                        <i class="fab fa-github mr-1"></i> Source Code
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Sha E-Wallet</h3>
+                            <p class="text-gray-700 mb-4">Sha E-Wallet is a mobile application that allows users to manage their finances. To make easily and fast transactions.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Figma</span>
+                                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Flutter</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 4 -->
+                <div class="project-item" data-category="mobile">
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md">
+                        <div class="relative group">
+                            <img src="images/Attendances.png" alt="Project 4" class="w-full h-60 object-cover">
+                            <div class="project-overlay absolute inset-0 bg-primary bg-opacity-90 flex items-center justify-center opacity-0 transition-opacity">
+                                <div class="text-center p-4">
+                                    <a href="#" class="inline-block bg-white text-primary hover:bg-gray-100 font-medium py-2 px-4 rounded-full transition-colors mx-2">
+                                        <i class="fas fa-link mr-1"></i> View Live
+                                    </a>
+                                    <a href="#" class="inline-block bg-white text-primary hover:bg-gray-100 font-medium py-2 px-4 rounded-full transition-colors mx-2">
+                                        <i class="fab fa-github mr-1"></i> Source Code
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Attendances App</h3>
+                            <p class="text-gray-700 mb-4">A mobile application for attendances management with time management and analytics.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Flutter</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 5
+                <div class="project-item" data-category="mobile">
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md">
+                        <div class="relative group">
+                            <img src="/placeholder.svg?height=300&width=500" alt="Project 5" class="w-full h-60 object-cover">
+                            <div class="project-overlay absolute inset-0 bg-primary bg-opacity-90 flex items-center justify-center opacity-0 transition-opacity">
+                                <div class="text-center p-4">
+                                    <a href="#" class="inline-block bg-white text-primary hover:bg-gray-100 font-medium py-2 px-4 rounded-full transition-colors mx-2">
+                                        <i class="fas fa-link mr-1"></i> View Live
+                                    </a>
+                                    <a href="#" class="inline-block bg-white text-primary hover:bg-gray-100 font-medium py-2 px-4 rounded-full transition-colors mx-2">
+                                        <i class="fab fa-github mr-1"></i> Source Code
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Travel Companion App</h3>
+                            <p class="text-gray-700 mb-4">A mobile app for travelers with itinerary planning, location-based recommendations, and offline maps.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Flutter</span>
+                                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Firebase</span>
+                                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Google Maps API</span>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                
+                <!-- Project 6
+                <div class="project-item" data-category="design">
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md">
+                        <div class="relative group">
+                            <img src="/placeholder.svg?height=300&width=500" alt="Project 6" class="w-full h-60 object-cover">
+                            <div class="project-overlay absolute inset-0 bg-primary bg-opacity-90 flex items-center justify-center opacity-0 transition-opacity">
+                                <div class="text-center p-4">
+                                    <a href="#" class="inline-block bg-white text-primary hover:bg-gray-100 font-medium py-2 px-4 rounded-full transition-colors mx-2">
+                                        <i class="fas fa-link mr-1"></i> View Live
+                                    </a>
+                                    <a href="#" class="inline-block bg-white text-primary hover:bg-gray-100 font-medium py-2 px-4 rounded-full transition-colors mx-2">
+                                        <i class="fab fa-github mr-1"></i> Source Code
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Mobile App UI Design</h3>
+                            <p class="text-gray-700 mb-4">Complete UI/UX design for a mobile application including wireframes, prototypes, and user testing.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Figma</span>
+                                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Sketch</span>
+                                <span class="text-xs bg-gray-100 px-2 py-1 rounded">Adobe XD</span>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Get In Touch</h2>
+                <div class="w-16 h-1 bg-primary mx-auto"></div>
+                <p class="text-gray-700 mt-4 max-w-2xl mx-auto">Feel free to contact me for any work or suggestions.</p>
+            </div>
+            
+            <div class="flex flex-col md:flex-row gap-10 max-w-6xl mx-auto">
+                <div class="md:w-1/2">
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-semibold mb-6">Contact Information</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium mb-1">Location</h4>
+                                    <p class="text-gray-700">Bogor, Indonesia</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium mb-1">Email</h4>
+                                    <p class="text-gray-700">hadilulya21@gmail.com</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium mb-1">Phone</h4>
+                                    <p class="text-gray-700">+6289676213234</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-globe"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium mb-1">Website</h4>
+                                    <p class="text-gray-700">This Website</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h4 class="font-medium mb-4">Follow Me</h4>
+                            <div class="flex space-x-4">
+                                <a href="https://www.linkedin.com/in/mustafa-hadil-7a68772a1?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="bg-gray-800 hover:bg-gray-900 text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="https://github.com/mufadilulya" class="bg-gray-800 hover:bg-gray-900 text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                                <a href="#" class="bg-gray-800 hover:bg-gray-900 text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="https://www.instagram.com/mudiya.12/" class="bg-gray-800 hover:bg-gray-900 text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="md:w-1/2">
+                    <form class="bg-gray-50 p-8 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-semibold mb-6">Send Me a Message</h3>
+                        
+                        <div class="mb-6">
+                            <label for="name" class="block text-gray-700 font-medium mb-2">Your Name</label>
+                            <input type="text" id="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Your Name">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
+                            <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Your Email">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="subject" class="block text-gray-700 font-medium mb-2">Subject</label>
+                            <input type="text" id="subject" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Subject">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="message" class="block text-gray-700 font-medium mb-2">Message</label>
+                            <textarea id="message" rows="5" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Your Message"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-primary hover:bg-secondary text-white font-medium py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center">
+                            <span>Send Message</span>
+                            <i class="fas fa-paper-plane ml-2"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <a href="#" class="text-2xl font-bold text-white">Mustafa <span class="text-primary">Hadil Ulya</span></a>
+                    <p class="mt-2 text-gray-400">Web Developer & Designer</p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="https://www.linkedin.com/in/mustafa-hadil-7a68772a1?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="text-gray-400 hover:text-primary transition-colors">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://github.com/mufadilulya" class="text-gray-400 hover:text-primary transition-colors">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.instagram.com/mudiya.12/" class="text-gray-400 hover:text-primary transition-colors">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 Mustafa Hadil Ulya. Make this with ❤️.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <a href="#home" class="fixed bottom-6 right-6 bg-primary hover:bg-secondary text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-colors">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</body>
+</html>
